@@ -1,1 +1,5 @@
-google drive shared folder http://googledrive.com/host/0B_MorrWDceaVRXR5aHFIYlNVMGM/
+my environment files in google drive shared folder http://googledrive.com/host/0B_MorrWDceaVRXR5aHFIYlNVMGM/
+
+generating simultaneous equations: http://googledrive.com/host/0B04CAcgJN7vNQ1p0b280MF9CMm8/
+
+age calculation using date picker
