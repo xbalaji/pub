@@ -1,0 +1,44 @@
+# file /etc/network/interfaces
+# copied from url: http://ubuntuforums.org/showthread.php?t=2180473
+# also see: http://askubuntu.com/questions/27432/configuring-ethernet-network
+# another url explaining mapping command
+
+# The primary network interface
+mapping eth0
+    script /etc/network/net.sh
+    map eth0 eth0-static
+    map eth0 eth0-dhcp
+
+iface eth0-dhcp inet dhcp
+
+iface eth0-static inet static
+    address 192.168.1.34
+    netmask 255.255.255.0
+    broadcast 192.168.1.255
+    gateway 192.168.1.1
+
+# this command is necessary for the system to come up in a static configuration on boot up
+auto eth0=eth0-static
+
+
+##############################################################################################
+#
+# file /etc/network/net.sh - script
+#
+#     root@xb-ubuntu:~# cat /etc/network/net.sh
+#     #!/bin/sh
+#     echo eth0
+#
+##############################################################################################
+
+
+# to bring up/down eth0 in dhcp ip, do the following
+# ifup eth0=eth0-dhcp
+# ifdown eth0=eth0-dhcp
+
+# to bring up eth0 in static ip, do the following
+# ifup eth0=eth0-static
+# ifdown eth0=eth0-static
+
+
+
