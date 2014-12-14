@@ -1,0 +1,16 @@
+ apt-get -y remove --purge libreoffice* 
+ apt-get -y remove unity-webapps-common
+ apt-get -y purge firefox
+ rm -fr /etc/firefox /usr/lib/firefox /usr/lib/firefox-addons/
+ echo "blacklist floppy" | tee /etc/modprobe.d/blacklist-floppy.conf 
+ rmmod floppy
+ update-initramfs -u
+ apt-get -y install libxss1 libappindicator1 libindicator7
+ wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+ dpkg -i google-chrome-stable_current_amd64.deb 
+ apt-get -y purge -y thunderbird*
+ apt-get -y purge gnome-games-common gbrainy
+ apt-get -y purge aisleriot gnome-sudoku mahjongg ace-of-penguins gnomine gbrainy
+ apt-get -y install -y openssh-server openssh-client
+ apt-get clean
+ apt-get autoremove
