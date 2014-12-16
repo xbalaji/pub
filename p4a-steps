@@ -1,16 +1,22 @@
-wget http://dl.google.com/android/ndk/android-ndk-r10d-linux-x86_64.bin
-  chmod +x android-ndk-r10d-linux-x86_64.bin
-  ./android-ndk-r10d-linux-x86_64.bin
-  rm android-ndk-r10d-linux-x86_64.bin android-sdk_r24.0.1-linux.tgz google-chrome-stable_current_amd64.deb 
+apt-get -y install git
+ git clone https://github.com/kivy/python-for-android
+
+ apt-get install -y openjdk-7-jdk
+
+ wget http://dl.google.com/android/android-sdk_r24.0.1-linux.tgz
+ tar xvfz android-sdk_r24.0.1-linux.tgz
+ cd android-sdk-linux/tools/
+ echo "now select the android sdk you want to install"
+ ./android
+
+ wget http://dl.google.com/android/ndk/android-ndk-r10d-linux-x86_64.bin
+ chmod +x android-ndk-r10d-linux-x86_64.bin
+ ./android-ndk-r10d-linux-x86_64.bin
+ rm android-ndk-r10d-linux-x86_64.bin android-sdk_r24.0.1-linux.tgz google-chrome-stable_current_amd64.deb 
 
   vi .android-env
   source .android-env
-  echo $PATH
-  bash
-  ls
-  ls
-  history
-  history > history01.txt
+
   apt-get -y install python-pip
   apt-get -y install python-dev
   add-apt-repository ppa:kivy-team/kivy
@@ -28,10 +34,21 @@ wget http://dl.google.com/android/ndk/android-ndk-r10d-linux-x86_64.bin
   apt-get -qqy update
   apt-get -qqy install libncurses5:i386 libstdc++6:i386 zlib1g:i386
 
+  apt-get clean
+  apt-get autoremove
+
   cd python-for-android/
   ./distribute.sh -m "pil openssl kivy"
 
-  vi .android-env
+cat << EOF > ~/.android-env
+export ANDROIDSDK="/home/xbalaji/android-sdk-linux"
+export ANDROIDNDK="/home/xbalaji/android-ndk-r10d"
+export ANDROIDNDKVER=r10d
+export ANDROIDAPI=14
+export P4A="/home/xbalaji/python-for-android"
+PATH=$PATH:$ANDROIDSDK/tools:$P4A/dist/default
+EOF
+
   source .android-env
   ls
   mkdir p4a
@@ -43,4 +60,5 @@ wget http://dl.google.com/android/ndk/android-ndk-r10d-linux-x86_64.bin
   cd ~/python-for-android/dist/default/
   build.py --dir ~/p4a/eg1/ --package org.test.kivy --name "Kivy Test" --version 0.1 debug
   ls -lrt bin
+
 
