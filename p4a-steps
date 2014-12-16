@@ -1,0 +1,46 @@
+wget http://dl.google.com/android/ndk/android-ndk-r10d-linux-x86_64.bin
+  chmod +x android-ndk-r10d-linux-x86_64.bin
+  ./android-ndk-r10d-linux-x86_64.bin
+  rm android-ndk-r10d-linux-x86_64.bin android-sdk_r24.0.1-linux.tgz google-chrome-stable_current_amd64.deb 
+
+  vi .android-env
+  source .android-env
+  echo $PATH
+  bash
+  ls
+  ls
+  history
+  history > history01.txt
+  apt-get -y install python-pip
+  apt-get -y install python-dev
+  add-apt-repository ppa:kivy-team/kivy
+  apt-get -y install python-kivy
+  apt-get -y install python-kivy-common
+  apt-get -y install cython
+  apt-get -y install zlib1g-dev
+  apt-get -y install ant
+  apt-get -f install -y
+  apt-get -y install vim
+  pip install cython==0.21
+  pip install jinja2
+
+  dpkg --add-architecture i386
+  apt-get -qqy update
+  apt-get -qqy install libncurses5:i386 libstdc++6:i386 zlib1g:i386
+
+  cd python-for-android/
+  ./distribute.sh -m "pil openssl kivy"
+
+  vi .android-env
+  source .android-env
+  ls
+  mkdir p4a
+  cd p4a/
+  vi main.py
+  cd
+
+
+  cd ~/python-for-android/dist/default/
+  build.py --dir ~/p4a/eg1/ --package org.test.kivy --name "Kivy Test" --version 0.1 debug
+  ls -lrt bin
+
