@@ -148,8 +148,8 @@ set ai
 set directory=.,/tmp,/var/tmp,.,~/tmp
 set paste
 
-map ^N :n^M
-map ^P :N^M
+map  :n
+map  :N
 
 noremap 5 %
 noremap % 5
@@ -157,12 +157,12 @@ noremap % 5
 if &term =~ "xterm"
 if has("terminfo")
   set t_Co=8
-  set t_Sf=^[[3%p1%dm
-  set t_Sb=^[[4%p1%dm
+  set t_Sf=[3%p1%dm
+  set t_Sb=[4%p1%dm
 else
   set t_Co=8
-  set t_Sf=^[[3%dm
-  set t_Sb=^[[4%dm
+  set t_Sf=[3%dm
+  set t_Sb=[4%dm
 endif
 endif
 
