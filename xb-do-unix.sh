@@ -148,8 +148,8 @@ set ai
 set directory=.,/tmp,/var/tmp,.,~/tmp
 set paste
 
-map  :n
-map  :N
+map  :n
+map  :N
 
 noremap 5 %
 noremap % 5
