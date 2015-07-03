@@ -1,3 +1,5 @@
+# get this file and execute
+# wget https://raw.githubusercontent.com/xbalaji/pub/master/xb-do-unix.sh | bash
 
 umask 022
 
