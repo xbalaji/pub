@@ -1,5 +1,8 @@
 # get this file and execute
+# wget http://bit.ly/xb-do-unix | bash
 # wget https://raw.githubusercontent.com/xbalaji/pub/master/xb-do-unix.sh | bash
+
+echo "Testing"
 
 umask 022
 
