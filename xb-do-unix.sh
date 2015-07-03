@@ -16,6 +16,7 @@ XB_DO_UNIX_SH=$BIN_DIR/xb-do-unix.sh
 APT_FIX_SCRIPT=$BIN_DIR/apt-fix.sh
 GIT_SETUP_SCRIPT=$BIN_DIR/setup-git.sh
 DIS_IPV6_SCRIPT=$BIN_DIR/disable-ipv6.sh
+CFG_ST_IP_SCRIPT=$BIN_DIR/network-config-static.sh
 
 
 echo $BASE_DIR
@@ -26,6 +27,7 @@ echo $BASHRC_FILE
 echo $XB_DO_UNIX_SH
 echo $GIT_SETUP_SCRIPT
 echo $DIS_IPV6_SCRIPT
+echo $CFG_ST_IP_SCRIPT
 
 
 
@@ -54,6 +56,26 @@ EOF
 sysctl -p
 EOF1
 chmod +x $DIS_IPV6_SCRIPT
+
+# convert dhcp to static ip
+cat << EOF > $CFG_ST_IP_SCRIPT
+#!/bin/bash
+
+iface_d='iface eth0 inet dhcp'
+iface_s='iface eth0 inet static'
+
+ip_line=\$(ifconfig eth0 | grep 'inet addr')
+a_line=\$(echo \$ip_line | awk '{print \$2}' | sed -e 's/addr:/   address /')
+m_line=\$(echo \$ip_line | awk '{print \$4}' | sed -e 's/Mask:/   netmask /')
+b_line=\$(echo \$ip_line | awk '{print \$3}' | sed -e 's/Bcast:/   broadcast /')
+g_line=\$(route -n | grep '^0' | awk '{print \$2}' | sed -e 's/^/   gateway /')
+
+dns_servers=$(grep nameserver /etc/resolv.conf | awk '{printf "%s ", \$2}')
+d_line=\$(echo "   dns-nameservers \$dns_servers")
+static_line="\n\$iface_s\n\$a_line\n\$m_line\n\$b_line\n\$g_line\n\$d_line\n"
+
+sed -i -e "s,\$iface_d,\${static_line},g" /etc/network/interfaces
+EOF
 
 # append to bashrc
 cat << EOF >> $BASHRC_FILE
@@ -148,8 +170,8 @@ set ai
 set directory=.,/tmp,/var/tmp,.,~/tmp
 set paste
 
-map  :n
-map  :N
+map  :n
+map  :N
 
 noremap 5 %
 noremap % 5
