@@ -1,6 +1,7 @@
 setup your minimal unix environment and customizations
 
-use xb-do-unix.sh :) 
+use xb-do-unix.sh
+
 wget http://bit.ly/xb-do-unix -q -O - | bash
 
 
