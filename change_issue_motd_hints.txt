@@ -1,0 +1,39 @@
+
+Modify /etc/rc.local as below:
+
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+# install apt-get -y install toilet
+sed -i -e '/The IP Address/,$d' /etc/issue
+
+IPADDRESS=$(/sbin/ifconfig | sed '/Bcast/!d;s/inet addr://;s/Bcast.*//')
+LINE1=$(echo $IPADDRESS | cut -d "." -f1-2)
+LINE2=$(echo $IPADDRESS | cut -d "." -f3-)
+
+echo "The IP Address is : $IPADDRESS" >> /etc/issue
+toilet --gay "  $LINE1"   >> /etc/issue
+toilet --gay "    $LINE2" >> /etc/issue
+exit 0
+
+
+Modify /etc/issue as below:
+Ubuntu 14.04.2 LTS \n \d \t on \l
+
+reboot !
+
+This will display the ip address of the system in the preview window of vmware (you need toilet "banner" equivalent)
+very much useful in a headless virtualbox vm
+
+How to start a headless vm in virtualbox?
+press shift and click start in gui or in command line 'VBoxHeadless ?'
