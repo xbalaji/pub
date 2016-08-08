@@ -210,10 +210,16 @@ hi StatusLine cterm=standout ctermfg=15 ctermbg=1 guifg=Green guibg=Red
 if has("win32")
     set nocompatible
     set guifont=courier_new:h12:w7
+    set guifont=Courier_New:h16:cANSI
 endif
 
 set ru
 syncbind
+
+function! WebFilesSettings(tsval)
+    setlocal ts=2
+    setlocal noai
+endfunction
 
 " binary editing
 augroup Binary
@@ -241,6 +247,8 @@ highlight VeryLongLine ctermbg=blue ctermfg=white
 
 highlight VVeryLongLine ctermbg=red ctermfg=green
 3match VVeryLongLine  /.\%>180v/
+
+autocmd BufEnter *.js,*.json,*.css,*.html,*.htm call WebFilesSettings(4)
 
 EOF
 
