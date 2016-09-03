@@ -82,6 +82,7 @@ chmod +x $CFG_ST_IP_SCRIPT
 cat << EOF >> $BASHRC_FILE
 
 umask 022
+PATH=.:\$PATH
 CDPATH=\$CDPATH:.:..:../..:../../..:\$HOME
 PAGER='less'
 IGNOREEOF=3
