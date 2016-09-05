@@ -199,9 +199,8 @@ set guifont=courier_new:h12:w7
 " setting backgroud and foreground colors...
 colors koehler
 unlet colors_name "do this so you dont mess with colorscheme
-hi Normal     ctermfg=15  ctermbg=0   guifg=black guibg=white
 hi Statement  cterm=bold  ctermfg=3   guifg=Brown
-hi Normal     ctermfg=15  ctermbg=10   guifg=black guibg=white
+hi Normal     ctermfg=15  ctermbg=0   guifg=black guibg=white
 
 " enable for status line..
 set laststatus=2
