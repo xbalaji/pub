@@ -157,6 +157,7 @@ EOF
 cat << EOF > $VIMRC_FILE
 "this is a comment in this .vimrc file
 
+set paste               " set this first, will reset other options
 set history=30          " history size
 set et                  " expand tabs
 set ts=4                " tab stop 4 columns
@@ -172,7 +173,6 @@ set tags=./tags,tags;
 set complete=.,b,i
 set ai
 set directory=.,/tmp,/var/tmp,.,~/tmp
-set paste
 
 map  :n
 map  :N
