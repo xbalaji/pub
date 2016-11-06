@@ -6,6 +6,7 @@ umask 022
 BASE_DIR=$HOME
 BASE_DIR=`pwd`
 BIN_DIR=$BASE_DIR/bin
+WIN_DIR=$BASE_DIR/win
 UNAME=$USER
 
 VIMRC_FILE=$BASE_DIR/.vimrc
@@ -17,6 +18,15 @@ APT_FIX_SCRIPT=$BIN_DIR/apt-fix.sh
 GIT_SETUP_SCRIPT=$BIN_DIR/setup-git.sh
 DIS_IPV6_SCRIPT=$BIN_DIR/disable-ipv6.sh
 CFG_ST_IP_SCRIPT=$BIN_DIR/network-config-static.sh
+
+DST_WIN_VIM_RC=$WIN_DIR/_vimrc
+DST_WIN_VIMRC=$WIN_DIR/vimrc
+DST_WIN_GVIMRC=$WIN_DIR/gvimrc
+WIN_README=$WIN_DIR/README.txt
+
+SRC_WIN_VIM_RC="https://raw.githubusercontent.com/xbalaji/pub/master/_vimrc"
+SRC_WIN_VIMRC="https://raw.githubusercontent.com/xbalaji/pub/master/vimrc"
+SRC_WIN_GVIMRC="https://raw.githubusercontent.com/xbalaji/pub/master/gvimrc"
 
 
 echo $BASE_DIR
@@ -32,6 +42,7 @@ echo $CFG_ST_IP_SCRIPT
 
 
 mkdir -p $BIN_DIR
+mkdir -p $WIN_DIR
 
 wget $XB_DO_UNIX -O $XB_DO_UNIX_SH --quiet
 chmod +x $XB_DO_UNIX_SH
@@ -262,3 +273,17 @@ git config --global push.default tracking
 
 EOF
 chmod +x $GIT_SETUP_SCRIPT
+
+cat << EOF >> $WIN_README
+
+Copy the files in this directory to $VIM directory 
+To find $VIM, open gvim and type :echo $VIM on command prompt
+
+EOF
+
+
+# download windows vimrc files
+wget $SRC_WIN_VIM_RC -O $DST_WIN_VIM_RC --quiet
+wget $SRC_WIN_VIMRC  -O $DST_WIN_VIMRC  --quiet
+wget $SRC_WIN_GVIMRC -O $DST_WIN_GVIMRC --quiet
+
