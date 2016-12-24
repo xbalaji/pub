@@ -184,6 +184,7 @@ set tags=./tags,tags;
 set complete=.,b,i
 set ai
 set directory=.,/tmp,/var/tmp,.,~/tmp
+set columns=80
 
 map  :n
 map  :N
@@ -192,15 +193,17 @@ noremap 5 %
 noremap % 5
 
 if &term =~ "xterm"
-if has("terminfo")
-  set t_Co=8
-  set t_Sf=[3%p1%dm
-  set t_Sb=[4%p1%dm
-else
-  set t_Co=8
-  set t_Sf=[3%dm
-  set t_Sb=[4%dm
-endif
+  set t_kb=
+  fixdel
+  if has("terminfo")
+    set t_Co=8
+    set t_Sf=[3%p1%dm
+    set t_Sb=[4%p1%dm
+  else
+    set t_Co=8
+    set t_Sf=[3%dm
+    set t_Sb=[4%dm
+  endif
 endif
 
 
@@ -210,8 +213,8 @@ set guifont=courier_new:h12:w7
 " setting backgroud and foreground colors...
 colors koehler
 unlet colors_name "do this so you dont mess with colorscheme
-hi Statement  cterm=bold  ctermfg=3   guifg=Brown
-hi Normal     ctermfg=15  ctermbg=0   guifg=black guibg=white
+" hi Statement  cterm=bold  ctermfg=3   guifg=Brown
+" hi Normal     ctermfg=15  ctermbg=0   guifg=black guibg=white
 
 " enable for status line..
 set laststatus=2
@@ -219,10 +222,45 @@ hi StatusLine cterm=standout ctermfg=15 ctermbg=1 guifg=Green guibg=Red
 
 
 if has("win32")
-    set nocompatible
-    set guifont=courier_new:h12:w7
-    set guifont=Courier_New:h16:cANSI
-endif
+  set nocompatible
+
+  source \$VIMRUNTIME/vimrc_example.vim
+  source \$VIMRUNTIME/mswin.vim
+
+  behave mswin
+
+  set guifont=courier_new:h12:w7
+  set guifont=Courier_New:h16:cANSI
+  set lines=48
+  set dir=%TMP%
+  set backupdir=%TMP%
+
+  set diffexpr=MyDiff()
+
+  function! MyDiff()
+    let opt = '-a --binary '
+    if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
+    if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
+    let arg1 = v:fname_in
+    if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
+    let arg2 = v:fname_new
+    if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
+    let arg3 = v:fname_out
+    if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
+    let eq = ''
+    if $VIMRUNTIME =~ ' '
+      if &sh =~ '\<cmd'
+        let cmd = '""' . $VIMRUNTIME . '\diff"'
+        let eq = '"'
+      else
+        let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+      endif
+    else
+      let cmd = $VIMRUNTIME . '\diff'
+    endif
+    silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
+  endfunction
+endif "has win32
 
 set ru
 syncbind
@@ -250,16 +288,113 @@ set rulerformat=%50(%{strftime('%m\/%e\/%y\ %I:%M\ %p')}\ %5l,%-6(%c%V%)\ %P%)
 set titlestring=%(\ %{\$CLEARCASE_ROOT}:\ %)%(\ %F%)
 
 " less straining to the eyes
-highlight LongLine ctermbg=grey ctermfg=black
-match LongLine  /.\%>80v/
+highlight LongLine ctermbg=red guibg=red
+match LongLine  /.\%>80v\%<130v/
 
-highlight VeryLongLine ctermbg=blue ctermfg=white
-2match VeryLongLine  /.\%>130v/
+" highlight VeryLongLine ctermbg=blue ctermfg=white
+highlight VeryLongLine ctermbg=green guibg=green
+2match VeryLongLine  /.\%>130v\%<179v/
 
-highlight VVeryLongLine ctermbg=red ctermfg=green
-3match VVeryLongLine  /.\%>180v/
+" highlight VVeryLongLine ctermbg=green ctermfg=white
+highlight VVeryLongLine ctermbg=blue guibg=blue
+3match VVeryLongLine  /.\%>180v.\%<400v/
 
 autocmd BufEnter *.js,*.json,*.css,*.html,*.htm call WebFilesSettings(4)
+
+" --------------------------------------------------------
+"    notes and help section: tips & tricks section
+" --------------------------------------------------------
+" highlight search, use the command below to highlight search
+" set hlsearch
+
+" not greedy search, to end at the first matching pattern in regex
+" to end the search after the first double quote after name, use
+" name="balaji" city="san jose" city="usa"
+" /name=".\{-}"
+"
+" the following replaces the line number generated in the
+" html formatted 'c' or 'h' file to an anchor based on the line number
+":g/\(^<font color=\"\#ffff00\">\)\( *\)\([0-9]*\)\(<\/font>\)/s//<a name="\3"\2>\1\2\3\4<\/a>/g
+
+" removing backspace
+" any character except CTRL+H followed by CTRL+H replace with nothing
+":g/\([^]\)\(\)/s///g
+
+let Tlist_Ctags_Cmd='/usr/bin/ctags --if0=yes --line-directives=yes --links=yes --recurse=yes --tag-relative=no --C++-kinds=+cdefgmnpstuvx --verbose=yes --totals=yes '
+let Tlist_Inc_Winwidth = 0
+let Tlist_Display_Prototype = 1
+let Tlist_Use_Horiz_Window = 0
+
+" BackSpaceDelete
+function! BackSpaceDelete()
+  let lnum = 1
+  while lnum < line('$')
+    let l = getline(lnum)
+      while l =~ '[^]'
+        let l = substitute(l, '[^]', '', '')
+      endwhile
+      call setline(lnum, l)
+      let lnum = lnum + 1
+  endwhile
+endfunction
+
+command! -nargs=0 BSdelete call BackSpaceDelete()
+
+" HomeSettings
+function! HomeSettings(tsval)
+  setlocal ts=4
+  "echo a:tsval
+  "setlocal syntax=off
+endfunction
+
+" SubVersionSettings
+function! SubVersionSettings(tsval)
+  setlocal ts=8
+  " setlocal syntax=cpp
+endfunction
+
+function! SubVersionSettings1(tsval)
+  setlocal ts=4
+  " setlocal syntax=cpp
+endfunction
+
+function! WebFilesSettings(tsval)
+  setlocal ts=2
+  setlocal noai
+endfunction
+
+"
+" increment and replace: first group the data, operate on the
+" particular block using functions and use "." to join the strings
+"
+" Example:   Async0/1,  Async0/2,   Async0/3,   Async0/4 with
+"            Async0/23  Async0/24,  Async0/25   Async0/26
+"
+" :g/\(Async0\/\)\(\d\)/s//\=submatch(1) . (submatch(2)+22)/gc
+
+" find lines that don't contain something
+" :g!/notthis/p
+
+" get the current file name, remove the path after the first 3 directories
+" and add tags file to the end
+
+"let s:cur_dir  = fnamemodify(bufname("%"), ":p")
+"let s:tag_file = substitute(s:cur_dir, '/\([^/]*\)/\([^/]*\)/\([^/]*\)/\(.*\)', '/\1/\2/\3/tags', 'g')
+"let &tags=s:tag_file
+
+autocmd BufEnter /users/xbalaji/*               call HomeSettings(4)
+autocmd BufEnter /home/xbalaji/*cpp             call SubVersionSettings(8)
+autocmd BufEnter /home/xbalaji/*h               call SubVersionSettings(8)
+autocmd BufEnter /home/xbalaji/main-xml/*cpp    call SubVersionSettings1(4)
+autocmd BufEnter /home/xbalaji/main-xml/*h      call SubVersionSettings1(4)
+autocmd BufEnter *.js,*.json,*.css,*.html,*.htm call WebFilesSettings(4)
+
+" replace === with increasing anchor number, new line and add === with number 
+" :let ix=1|g/\(^=== \)/s//\="<<Anchor(Num" . ix . ")>>\r".submatch(0). " " . ix . "  "/ | let ix+=1
+
+" add line number like c-style comment, right justified with padded zero's, without zeros 
+" :let ix=1|g/^/s//\=printf("\/* %04d *\/ ",ix) /|let ix+=1
+" :let ix=1|g/^/s//\=printf("\/* %4d *\/ ",ix) /|let ix+=1
 
 EOF
 
@@ -283,7 +418,11 @@ EOF
 
 
 # download windows vimrc files
-wget $SRC_WIN_VIM_RC -O $DST_WIN_VIM_RC --quiet
-wget $SRC_WIN_VIMRC  -O $DST_WIN_VIMRC  --quiet
-wget $SRC_WIN_GVIMRC -O $DST_WIN_GVIMRC --quiet
+# wget $SRC_WIN_VIMRC -O $DST_WIN_VIMRC  --quiet
+# wget $SRC_WIN_VIMRC -O $DST_WIN_VIM_RC --quiet
+# wget $SRC_WIN_VIMRC -O $DST_WIN_GVIMRC --quiet
+
+cp $VIMRC_FILE $DST_WIN_VIMRC
+cp $VIMRC_FILE $DST_WIN_VIM_RC
+cp $VIMRC_FILE $DST_WIN_GVIMRC
 
