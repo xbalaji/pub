@@ -125,6 +125,12 @@ myman()
     nroff -man \$* | less
 }
 
+# world visible ip address
+whatsmyip2()
+{
+    curl -s checkip.dyndns.org  |  sed -e 's,^.*IP Address: ,,g;s,<\/body.*,,g'
+}
+
 # aliases
 alias a='alias'
 a al='a | less'
@@ -159,6 +165,7 @@ a rm='rm -i'
 a so='source'
 a t='type -a'
 a vi='vim'
+a whatsmyip='curl ipinfo.io/ip'
 
 # using find with prune, skip any directory or file with name _build and then do the or operation "-o"
 a mytags1='find $PWD  -type d -name _build -prune -o  \( -iname "*.cpp" -o -iname "*.hpp" -o -iname "*.[ch]" \)  -print | /usr/bin/ctags --sort=yes --language-force=C++ --if0=yes --line-directives=yes --links=yes --tag-relative=no --C++-kinds=+cdefgmnpstuvx --fields=+iaS  --extra=+q --verbose=yes --totals=yes -L -'
