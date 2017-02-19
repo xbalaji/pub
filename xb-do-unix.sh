@@ -72,10 +72,12 @@ chmod +x $DIS_IPV6_SCRIPT
 cat << EOF > $CFG_ST_IP_SCRIPT
 #!/bin/bash
 
-iface_d='iface eth0 inet dhcp'
-iface_s='iface eth0 inet static'
+IFACE_2REPLACE="eth0"
 
-ip_line=\$(ifconfig eth0 | grep 'inet addr')
+iface_d="iface \${IFACE_2REPLACE} inet dhcp"
+iface_s="iface \${IFACE_2REPLACE} inet static"
+
+ip_line=\$(ifconfig \${IFACE_2REPLACE} | grep 'inet addr')
 a_line=\$(echo \$ip_line | awk '{print \$2}' | sed -e 's/addr:/    address /')
 m_line=\$(echo \$ip_line | awk '{print \$4}' | sed -e 's/Mask:/    netmask /')
 b_line=\$(echo \$ip_line | awk '{print \$3}' | sed -e 's/Bcast:/    broadcast /')
