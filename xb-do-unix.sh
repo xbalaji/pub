@@ -1,3 +1,4 @@
+#! env bash
 # get this file and execute
 # wget http://bit.ly/xb-do-unix -q -O - | bash
 
@@ -11,6 +12,7 @@ UNAME=$USER
 
 VIMRC_FILE=$BASE_DIR/.vimrc
 BASHRC_FILE=$BASE_DIR/.bashrc
+PROFILE_FILE=$BASE_DIR/.profile
 
 XB_DO_UNIX=http://bit.ly/xb-do-unix
 XB_DO_UNIX_SH=$BIN_DIR/xb-do-unix.sh
@@ -34,6 +36,7 @@ echo $BIN_DIR
 echo $XB_DO_UNIX
 echo $VIMRC_FILE
 echo $BASHRC_FILE
+echo $PROFILE_FILE
 echo $XB_DO_UNIX_SH
 echo $GIT_SETUP_SCRIPT
 echo $DIS_IPV6_SCRIPT
@@ -423,6 +426,10 @@ cat << EOF >> $WIN_README
 Copy the files in this directory to $VIM directory 
 To find $VIM, open gvim and type :echo $VIM on command prompt
 
+EOF
+
+cat << EOF >> $PROFILE_FILE
+source $BASHRC_FILE
 EOF
 
 
