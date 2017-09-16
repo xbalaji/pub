@@ -75,8 +75,10 @@ chmod +x $DIS_IPV6_SCRIPT
 cat << EOF > $CFG_ST_IP_SCRIPT
 #!/bin/bash
 
-IFACE_2REPLACE="eth0"
+IFACE_2REPLACE=\$(ifquery -X lo --list)
+echo \${IFACE_2REPLACE}
 
+IFACE_FILE="/etc/network/interfaces"
 iface_d="iface \${IFACE_2REPLACE} inet dhcp"
 iface_s="iface \${IFACE_2REPLACE} inet static"
 
@@ -90,7 +92,13 @@ dns_servers=\$(grep nameserver /etc/resolv.conf | awk '{printf "%s ", \$2}')
 d_line=\$(echo "    dns-nameservers \$dns_servers")
 static_line="\n\$iface_s\n\$a_line\n\$m_line\n\$b_line\n\$g_line\n\$d_line\n"
 
-sed -i -e "s,\$iface_d,\${static_line},g" /etc/network/interfaces
+sed -e "s,\$iface_d,\${static_line},g" \${IFACE_FILE}
+
+if [ -w \${IFACE_FILE} ]
+then
+    sed -i -e "s,\$iface_d,\${static_line},g" \${IFACE_FILE}
+fi
+
 EOF
 chmod +x $CFG_ST_IP_SCRIPT
 
@@ -196,7 +204,7 @@ set tags=./tags,tags;
 set complete=.,b,i
 set ai
 set directory=.,/tmp,/var/tmp,.,~/tmp
-set columns=80
+"set columns=80
 
 map  :n
 map  :N
