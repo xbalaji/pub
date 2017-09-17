@@ -319,7 +319,7 @@ highlight VeryLongLine ctermbg=green guibg=green
 highlight VVeryLongLine ctermbg=blue guibg=blue
 3match VVeryLongLine  /.\%>180v.\%<400v/
 
-autocmd BufEnter *.js,*.json,*.css,*.html,*.htm call WebFilesSettings(4)
+autocmd BufEnter *.js,*.json,*.css,*.html,*.htm,*.yml call WebFilesSettings(4)
 
 " --------------------------------------------------------
 "    notes and help section: tips & tricks section
