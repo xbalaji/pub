@@ -285,11 +285,6 @@ endif "has win32
 set ru
 syncbind
 
-function! WebFilesSettings(tsval)
-    setlocal ts=2
-    setlocal noai
-endfunction
-
 " binary editing
 augroup Binary
   au!
@@ -318,8 +313,6 @@ highlight VeryLongLine ctermbg=green guibg=green
 " highlight VVeryLongLine ctermbg=green ctermfg=white
 highlight VVeryLongLine ctermbg=blue guibg=blue
 3match VVeryLongLine  /.\%>180v.\%<400v/
-
-autocmd BufEnter *.js,*.json,*.css,*.html,*.htm,*.yml call WebFilesSettings(4)
 
 " --------------------------------------------------------
 "    notes and help section: tips & tricks section
@@ -360,27 +353,26 @@ endfunction
 
 command! -nargs=0 BSdelete call BackSpaceDelete()
 
+" WebFileSettings
+function! WebFileSettings(tsval)
+  let &l:ts=a:tsval "special case for numeric variables in vim functions
+  setlocal noai
+endfunction
+
 " HomeSettings
 function! HomeSettings(tsval)
-  setlocal ts=4
-  "echo a:tsval
-  "setlocal syntax=off
+  let &l:ts=a:tsval 
 endfunction
 
 " SubVersionSettings
 function! SubVersionSettings(tsval)
-  setlocal ts=8
-  " setlocal syntax=cpp
+  let &l:ts=a:tsval 
 endfunction
 
-function! SubVersionSettings1(tsval)
-  setlocal ts=4
-  " setlocal syntax=cpp
-endfunction
-
-function! WebFilesSettings(tsval)
-  setlocal ts=2
-  setlocal noai
+function! UnHighLight()
+  match
+  2match
+  3match
 endfunction
 
 "
@@ -405,9 +397,10 @@ endfunction
 autocmd BufEnter /users/xbalaji/*               call HomeSettings(4)
 autocmd BufEnter /home/xbalaji/*cpp             call SubVersionSettings(8)
 autocmd BufEnter /home/xbalaji/*h               call SubVersionSettings(8)
-autocmd BufEnter /home/xbalaji/main-xml/*cpp    call SubVersionSettings1(4)
-autocmd BufEnter /home/xbalaji/main-xml/*h      call SubVersionSettings1(4)
-autocmd BufEnter *.js,*.json,*.css,*.html,*.htm call WebFilesSettings(4)
+autocmd BufEnter /home/xbalaji/main-xml/*cpp    call SubVersionSettings(4)
+autocmd BufEnter /home/xbalaji/main-xml/*h      call SubVersionSettings(4)
+autocmd BufEnter *.js,*.css,*.html,*.htm        call WebFileSettings(2)
+autocmd BufEnter .vimrc,*.json,*.yml,*.py       call WebFileSettings(2)
 
 " replace === with increasing anchor number, new line and add === with number 
 " :let ix=1|g/\(^=== \)/s//\="<<Anchor(Num" . ix . ")>>\r".submatch(0). " " . ix . "  "/ | let ix+=1
@@ -416,6 +409,7 @@ autocmd BufEnter *.js,*.json,*.css,*.html,*.htm call WebFilesSettings(4)
 " :let ix=1|g/^/s//\=printf("\/* %04d *\/ ",ix) /|let ix+=1
 " :let ix=1|g/^/s//\=printf("\/* %4d *\/ ",ix) /|let ix+=1
 
+set paste
 EOF
 
 cat << EOF >> $GIT_SETUP_SCRIPT
