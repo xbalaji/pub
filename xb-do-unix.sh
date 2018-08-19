@@ -207,11 +207,17 @@ set noai
 set directory=.,/tmp,/var/tmp,.,~/tmp
 "set columns=80
 
-map  :n
-map  :N
+nnoremap  :n<CR>
+nnoremap  :N<CR>
 
-noremap 5 %
-noremap % 5
+nnoremap 5 %
+nnoremap % 5
+
+" fold related stuff
+set fdm=indent        " set fold method as indent
+set nofoldenable      " disable fold by default
+nnoremap - za         " map - (minus) for fold toggle
+nnoremap _ zR         " map _ (underscore) to unfold all
 
 if &term =~ "xterm"
   set t_kb=
