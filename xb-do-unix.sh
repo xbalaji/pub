@@ -397,7 +397,6 @@ autocmd BufEnter *.sh,*yaml,*rs             call SetTabSize(2)
 " :let ix=1|g/^/s//\=printf("\/* %04d *\/ ",ix) /|let ix+=1
 " :let ix=1|g/^/s//\=printf("\/* %4d *\/ ",ix) /|let ix+=1
 
-set paste
 set fdm=indent        " set fold method as indent
 set nofoldenable      " disable fold by default
 EOF
