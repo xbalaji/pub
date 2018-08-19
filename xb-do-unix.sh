@@ -191,10 +191,10 @@ cat << EOF > $VIMRC_FILE
 
 set paste               " set this first, will reset other options
 set history=30          " history size
+set ru                  " set ruler
+set nosm                " don't show match by default
 set et                  " expand tabs
 set ts=4                " tab stop 4 columns
-set ru                  " set ruler
-set nosm
 set sw=4
 
 " Match Paren is a plugin, disable loading it,
@@ -203,7 +203,7 @@ au VimEnter * NoMatchParen
 
 set tags=./tags,tags;
 set complete=.,b,i
-set ai
+set noai
 set directory=.,/tmp,/var/tmp,.,~/tmp
 "set columns=80
 
@@ -354,20 +354,10 @@ endfunction
 
 command! -nargs=0 BSdelete call BackSpaceDelete()
 
-" WebFileSettings
-function! WebFileSettings(tsval)
-  let &l:ts=a:tsval "special case for numeric variables in vim functions
-  setlocal noai
-endfunction
-
-" HomeSettings
-function! HomeSettings(tsval)
-  let &l:ts=a:tsval 
-endfunction
-
-" SubVersionSettings
-function! SubVersionSettings(tsval)
-  let &l:ts=a:tsval 
+" SetTabSize
+function! SetTabSize(tsval)
+  let &l:ts=a:tsval " special case setting properties to variables
+  let &l:sw=a:tsval " set shift-width same as tab-size
 endfunction
 
 function! UnHighLight()
@@ -395,13 +385,10 @@ endfunction
 "let s:tag_file = substitute(s:cur_dir, '/\([^/]*\)/\([^/]*\)/\([^/]*\)/\(.*\)', '/\1/\2/\3/tags', 'g')
 "let &tags=s:tag_file
 
-autocmd BufEnter /users/xbalaji/*               call HomeSettings(4)
-autocmd BufEnter /home/xbalaji/*cpp             call SubVersionSettings(8)
-autocmd BufEnter /home/xbalaji/*h               call SubVersionSettings(8)
-autocmd BufEnter /home/xbalaji/main-xml/*cpp    call SubVersionSettings(4)
-autocmd BufEnter /home/xbalaji/main-xml/*h      call SubVersionSettings(4)
-autocmd BufEnter *.js,*.css,*.html,*.htm        call WebFileSettings(2)
-autocmd BufEnter .vimrc,*.json,*.yml,*.py       call WebFileSettings(2)
+autocmd BufEnter *cpp,*h,*c,*hpp,*cc        call SetTabSize(2)
+autocmd BufEnter *.js,*.css,*.html,*.htm    call SetTabSize(2)
+autocmd BufEnter .vimrc,*.json,*.yml,*.py   call SetTabSize(2)
+autocmd BufEnter *.sh,*yaml,*rs             call SetTabSize(2)
 
 " replace === with increasing anchor number, new line and add === with number 
 " :let ix=1|g/\(^=== \)/s//\="<<Anchor(Num" . ix . ")>>\r".submatch(0). " " . ix . "  "/ | let ix+=1
@@ -411,6 +398,8 @@ autocmd BufEnter .vimrc,*.json,*.yml,*.py       call WebFileSettings(2)
 " :let ix=1|g/^/s//\=printf("\/* %4d *\/ ",ix) /|let ix+=1
 
 set paste
+set fdm=indent        " set fold method as indent
+set nofoldenable      " disable fold by default
 EOF
 
 cat << EOF >> $GIT_SETUP_SCRIPT
