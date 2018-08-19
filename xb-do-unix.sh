@@ -42,8 +42,6 @@ echo $GIT_SETUP_SCRIPT
 echo $DIS_IPV6_SCRIPT
 echo $CFG_ST_IP_SCRIPT
 
-
-
 mkdir -p $BIN_DIR
 mkdir -p $WIN_DIR
 
@@ -219,6 +217,8 @@ set nofoldenable      " disable fold by default
 nnoremap - za         " map - (minus) for fold toggle
 nnoremap _ zR         " map _ (underscore) to unfold all
 
+set lazyredraw
+
 if &term =~ "xterm"
   set t_kb=
   fixdel
@@ -289,7 +289,6 @@ if has("win32")
   endfunction
 endif "has win32
 
-set ru
 syncbind
 
 " binary editing
@@ -403,8 +402,6 @@ autocmd BufEnter *.sh,*yaml,*rs             call SetTabSize(2)
 " :let ix=1|g/^/s//\=printf("\/* %04d *\/ ",ix) /|let ix+=1
 " :let ix=1|g/^/s//\=printf("\/* %4d *\/ ",ix) /|let ix+=1
 
-set fdm=indent        " set fold method as indent
-set nofoldenable      " disable fold by default
 EOF
 
 cat << EOF >> $GIT_SETUP_SCRIPT
