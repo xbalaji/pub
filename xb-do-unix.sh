@@ -194,6 +194,7 @@ set nosm                " don't show match by default
 set et                  " expand tabs
 set ts=4                " tab stop 4 columns
 set sw=4
+set sts=4               " :help softtabstop
 
 " Match Paren is a plugin, disable loading it,
 " use :DoMatchParen and :NoMatchParen to control after loading it
@@ -361,8 +362,9 @@ command! -nargs=0 BSdelete call BackSpaceDelete()
 
 " SetTabSize
 function! SetTabSize(tsval)
-  let &l:ts=a:tsval " special case setting properties to variables
-  let &l:sw=a:tsval " set shift-width same as tab-size
+  let &l:ts=a:tsval  " special case setting properties to variables
+  let &l:sw=a:tsval  " set shift-width same as tab-size
+  let &l:sts=a:tsval " set softtabstop same as tab-size
 endfunction
 
 function! UnHighLight()
