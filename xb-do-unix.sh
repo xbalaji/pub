@@ -110,6 +110,7 @@ CDPATH=\$CDPATH:.:..:../..:../../..:\$HOME
 PAGER='less'
 IGNOREEOF=3
 HISTCONTROL=ignoredups
+EDITOR='vim'
 PS1="\u@\H - \D{%m/%d/%y %H:%M:%S} [pwd:\w]\n\\$"
 
 # useful functions
@@ -149,6 +150,7 @@ a al='a | less'
 a bc='bc -l'
 a c='clear'
 a cls='clear'
+a date='date "+%A %B %d, %Y %r"'
 a dmpath='echo \$MANPATH | tr ":" "\n"'
 a dpath='echo \$PATH | tr ":" "\n"'
 a ebash='exec bash'
