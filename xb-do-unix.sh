@@ -105,7 +105,7 @@ cat << EOF >> $BASHRC_FILE
 
 umask 022
 shopt -qs checkwinsize
-PATH=.:\$HOME/.subuser/bin:\$PATH
+PATH=.:\$HOME/.subuser/bin:\$HOME/bin:\$PATH
 CDPATH=\$CDPATH:.:..:../..:../../..:\$HOME
 PAGER='less'
 IGNOREEOF=3
