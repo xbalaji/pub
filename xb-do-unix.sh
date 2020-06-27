@@ -105,12 +105,15 @@ cat << EOF >> $BASHRC_FILE
 
 umask 022
 shopt -qs checkwinsize
-PATH=.:\$HOME/.subuser/bin:\$HOME/bin:\$PATH
 CDPATH=\$CDPATH:.:..:../..:../../..:\$HOME
-PAGER='less'
-IGNOREEOF=3
-HISTCONTROL=ignoredups
 EDITOR='vim'
+GIT_PROMPT_ONLY_IN_REPO=1
+GIT_PROMPT_START="\u@\H - \D{%m/%d/%y %H:%M:%S} [pwd:\w]"
+GIT_PROMPT_END="\n\\$"
+HISTCONTROL=ignoredups
+IGNOREEOF=3
+PAGER='less'
+PATH=.:\$HOME/.subuser/bin:\$HOME/bin:\$PATH
 PS1="\u@\H - \D{%m/%d/%y %H:%M:%S} [pwd:\w]\n\\$"
 
 # useful functions
@@ -150,7 +153,6 @@ a al='a | less'
 a bc='bc -l'
 a c='clear'
 a cls='clear'
-a date='date "+%A %B %d, %Y %r"'
 a dmpath='echo \$MANPATH | tr ":" "\n"'
 a dpath='echo \$PATH | tr ":" "\n"'
 a ebash='exec bash'
@@ -173,14 +175,18 @@ a lsrt='ls -Llrt'
 a make='/usr/bin/make -k'
 a man='man -a'
 a mv='mv -i'
+a mydate='date "+%A %B %d, %Y %r"'
 a nl='nl -ba'
+a piplistoutdated="pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f1"
+a pip=pip3
+a pipupgradeall="pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f1| xargs -n1 pip install -U"
 a psme='ps -u \$USER -f'
+a python='python3'
 a rm='rm -i'
 a so='source'
 a t='type -a'
 a vi='vim'
 a whatsmyip='curl ipinfo.io/ip'
-
 # using find with prune, skip any directory or file with name _build and then do the or operation "-o"
 a mytags1='find $PWD  -type d -name _build -prune -o  \( -iname "*.cpp" -o -iname "*.hpp" -o -iname "*.[ch]" \)  -print | /usr/bin/ctags --sort=yes --language-force=C++ --if0=yes --line-directives=yes --links=yes --tag-relative=no --C++-kinds=+cdefgmnpstuvx --fields=+iaS  --extra=+q --verbose=yes --totals=yes -L -'
 EOF
@@ -194,9 +200,9 @@ set history=30          " history size
 set ru                  " set ruler
 set nosm                " don't show match by default
 set et                  " expand tabs
-set ts=4                " tab stop 4 columns
-set sw=4
-set sts=4               " :help softtabstop
+set ts=2                " tab stop 4 columns
+set sw=2
+set sts=2               " :help softtabstop
 
 " Match Paren is a plugin, disable loading it,
 " use :DoMatchParen and :NoMatchParen to control after loading it
@@ -397,7 +403,7 @@ endfunction
 autocmd BufEnter *cpp,*h,*c,*hpp,*cc        call SetTabSize(2)
 autocmd BufEnter *.js,*.css,*.html,*.htm    call SetTabSize(2)
 autocmd BufEnter .vimrc,*.json,*.yml,*.py   call SetTabSize(2)
-autocmd BufEnter *.sh,*yaml,*rs             call SetTabSize(2)
+autocmd BufEnter *.sh,*yaml,*rs,*.tf        call SetTabSize(2)
 
 " replace === with increasing anchor number, new line and add === with number 
 " :let ix=1|g/\(^=== \)/s//\="<<Anchor(Num" . ix . ")>>\r".submatch(0). " " . ix . "  "/ | let ix+=1
