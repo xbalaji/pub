@@ -104,17 +104,32 @@ chmod +x $CFG_ST_IP_SCRIPT
 cat << EOF >> $BASHRC_FILE
 
 umask 022
+
+case \$- in
+    *i*) ;;
+      *) return;;
+esac
+
 shopt -qs checkwinsize
+shopt -s histappend
 CDPATH=\$CDPATH:.:..:../..:../../..:\$HOME
 EDITOR='vim'
 GIT_PROMPT_ONLY_IN_REPO=1
 GIT_PROMPT_START="\u@\H - \D{%m/%d/%y %H:%M:%S} [pwd:\w]"
 GIT_PROMPT_END="\n\\$"
-HISTCONTROL=ignoredups
+HISTCONTROL=ignoreboth
 IGNOREEOF=3
 PAGER='less'
 PATH=.:\$HOME/.subuser/bin:\$HOME/bin:\$PATH
 PS1="\u@\H - \D{%m/%d/%y %H:%M:%S} [pwd:\w]\n\\$"
+
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
 
 # useful functions
 # find pattern
