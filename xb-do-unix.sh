@@ -1,4 +1,4 @@
-#! env bash
+#! /usr/bin/env bash
 # get this file and execute
 # wget http://bit.ly/xb-do-unix -q -O - | bash
 
@@ -102,14 +102,15 @@ chmod +x $CFG_ST_IP_SCRIPT
 
 # append to bashrc
 cat << EOF >> $BASHRC_FILE
+# custom bashrc: xbalaji@gmail.com
 
-umask 022
-
+# If not running interactively, don't do anything
 case \$- in
     *i*) ;;
       *) return;;
 esac
 
+umask 022
 shopt -qs checkwinsize
 shopt -s histappend
 CDPATH=\$CDPATH:.:..:../..:../../..:\$HOME
@@ -117,10 +118,12 @@ EDITOR='vim'
 GIT_PROMPT_ONLY_IN_REPO=1
 GIT_PROMPT_START="\u@\H - \D{%m/%d/%y %H:%M:%S} [pwd:\w]"
 GIT_PROMPT_END="\n\\$"
-HISTCONTROL=ignoreboth
+HISTCONTROL=ignoreboth # ignore duplicate and lines starting with space
+HISTFILESIZE=2000
+HISTSIZE=1000
 IGNOREEOF=3
 PAGER='less'
-PATH=.:\$HOME/.subuser/bin:\$HOME/bin:\$PATH
+PATH=.:\$HOME/bin:\$HOME:/.local/bin:\$HOME/.cargo/bin:\$PATH
 PS1="\u@\H - \D{%m/%d/%y %H:%M:%S} [pwd:\w]\n\\$"
 
 if ! shopt -oq posix; then
@@ -162,9 +165,20 @@ whatsmyip2()
     curl -s checkip.dyndns.org  |  sed -e 's,^.*IP Address: ,,g;s,<\/body.*,,g'
 }
 
+export TWILIO_ACCOUNT_SID=GET_FROM_TWILIO
+export TWILIO_AUTH_TOKEN=GET_FROM_TWILIO
+twilio-phone-get()
+{
+  num=\$(echo \${*} | tr -d [:space:])
+  [[ "\$num" =~ ^[0-9].* ]] && num="+1\${num}"
+  echo \$num
+  twilio api:lookups:v1:phone-numbers:fetch --type carrier --type caller-name -o json --phone-number "\${num}"
+}
+
 # aliases
 alias a='alias'
 a al='a | less'
+a aws2='awsv2'
 a bc='bc -l'
 a c='clear'
 a cls='clear'
@@ -202,8 +216,18 @@ a so='source'
 a t='type -a'
 a vi='vim'
 a whatsmyip='curl ipinfo.io/ip'
+a wslcopy='clip.exe'
+a wslpaste='powershell.exe -command "Get-Clipboard"'
+a wtsettings='vi /mnt/c/Users/xbalaji/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json'
+
 # using find with prune, skip any directory or file with name _build and then do the or operation "-o"
-a mytags1='find $PWD  -type d -name _build -prune -o  \( -iname "*.cpp" -o -iname "*.hpp" -o -iname "*.[ch]" \)  -print | /usr/bin/ctags --sort=yes --language-force=C++ --if0=yes --line-directives=yes --links=yes --tag-relative=no --C++-kinds=+cdefgmnpstuvx --fields=+iaS  --extra=+q --verbose=yes --totals=yes -L -'
+a mytags1='find \$PWD  -type d -name _build -prune -o  \( -iname "*.cpp" -o -iname "*.hpp" -o -iname "*.[ch]" \)  -print | /usr/bin/ctags --sort=yes --language-force=C++ --if0=yes --line-directives=yes --links=yes --tag-relative=no --C++-kinds=+cdefgmnpstuvx --fields=+iaS  --extra=+q --verbose=yes --totals=yes -L -'
+
+export NVM_DIR="\$HOME/.nvm"
+[ -s "\$NVM_DIR/nvm.sh" ] && \. "\$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "\$NVM_DIR/bash_completion" ] && \. "\$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+source \$HOME/dev/public/bash-git-prompt/gitprompt.sh
 EOF
 
 # create .vimrc
@@ -215,7 +239,7 @@ set history=30          " history size
 set ru                  " set ruler
 set nosm                " don't show match by default
 set et                  " expand tabs
-set ts=2                " tab stop 4 columns
+set ts=2                " tab stop 2 columns
 set sw=2
 set sts=2               " :help softtabstop
 
