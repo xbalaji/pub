@@ -451,10 +451,10 @@ autocmd BufEnter *.js,*.css,*.html,*.htm    call SetTabSize(2)
 autocmd BufEnter .vimrc,*.json,*.yml,*.py   call SetTabSize(2)
 autocmd BufEnter *.sh,*yaml,*rs,*.tf        call SetTabSize(2)
 
-" replace === with increasing anchor number, new line and add === with number 
+" replace === with increasing anchor number, new line and add === with number
 " :let ix=1|g/\(^=== \)/s//\="<<Anchor(Num" . ix . ")>>\r".submatch(0). " " . ix . "  "/ | let ix+=1
 
-" add line number like c-style comment, right justified with padded zero's, without zeros 
+" add line number like c-style comment, right justified with padded zero's, without zeros
 " :let ix=1|g/^/s//\=printf("\/* %04d *\/ ",ix) /|let ix+=1
 " :let ix=1|g/^/s//\=printf("\/* %4d *\/ ",ix) /|let ix+=1
 
@@ -473,13 +473,13 @@ chmod +x $GIT_SETUP_SCRIPT
 
 cat << EOF >> $WIN_README
 
-Copy the files in this directory to $VIM directory 
-To find $VIM, open gvim and type :echo $VIM on command prompt
+Copy the files in this directory to \$VIM directory
+To find \$VIM, open gvim and type :echo \$VIM on command prompt
 
 EOF
 
 cat << EOF >> $PROFILE_FILE
-source $BASHRC_FILE
+[[ -f $BASHRC_FILE ]] && source $BASHRC_FILE
 EOF
 
 
