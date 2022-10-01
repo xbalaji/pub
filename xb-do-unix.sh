@@ -168,8 +168,8 @@ whatsmyip2()
 # gitgo, switch to remote branch
 gitgo ()
 {
-    [ $(git branch -r | grep $1 | wc -l) -ne 1 ] && echo "Remote has multiple or no branches for $1" && return;
-    git switch $(git branch -r | grep $1 | cut -d "/" -f2-)
+    [ \$(git branch -r | grep \$1 | wc -l) -ne 1 ] && echo "Remote has multiple or no branches for \$1" && return;
+    git switch \$(git branch -r | grep \$1 | cut -d "/" -f2-)
 }
 
 export TWILIO_ACCOUNT_SID=GET_FROM_TWILIO
