@@ -165,6 +165,13 @@ whatsmyip2()
     curl -s checkip.dyndns.org  |  sed -e 's,^.*IP Address: ,,g;s,<\/body.*,,g'
 }
 
+# gitgo, switch to remote branch
+gitgo ()
+{
+    [ $(git branch -r | grep $1 | wc -l) -ne 1 ] && echo "Remote has multiple or no branches for $1" && return;
+    git switch $(git branch -r | grep $1 | cut -d "/" -f2-)
+}
+
 export TWILIO_ACCOUNT_SID=GET_FROM_TWILIO
 export TWILIO_AUTH_TOKEN=GET_FROM_TWILIO
 twilio-phone-get()
