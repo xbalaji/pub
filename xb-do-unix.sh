@@ -168,9 +168,15 @@ whatsmyip2()
 # gitgo, switch to remote branch
 gitgo ()
 {
-    [ \$(git branch -r | grep \$1 | wc -l) -ne 1 ] && echo "Remote has multiple or no branches for \$1" && return;
-    git switch \$(git branch -r | grep \$1 | cut -d "/" -f2-)
+    [ \$(git branch -r | grep -v HEAD | grep -c \$1) -ne 1 ] && echo "\$1 matches multiple or no branches" && return;
+    git switch \$(git branch -r | grep -v HEAD | grep \$1 | cut -d "/" -f2-)
 }
+
+gitprunebranches ()
+{
+    cd \$(git rev-parse --show-toplevel) && git switch main && git branch -D \$(git branch | cut -c3- | grep -v "main\$" | tr '\n' ' ') && git remote prune origin && git pull --rebase
+}
+
 
 export TWILIO_ACCOUNT_SID=GET_FROM_TWILIO
 export TWILIO_AUTH_TOKEN=GET_FROM_TWILIO
