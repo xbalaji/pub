@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body, html {
+      margin: 0;
+    }
+    iframe {
+      border: 1px solid rgba(0, 0, 0, 0.8);
+    }
+    .grid-container {
+      display: grid;
+      column-gap: 1px;
+      padding: 1px;
+      grid-template-columns: auto auto;
+      background-color: #2196F3;
+      min-height: 99vh;
+      min-width: 99vw;
+      grid-auto-columns: auto;
+    }
+    .grid-item {
+      background-color: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(0, 0, 0, 0.8);
+      padding: 1px;
+      font-size: 30px;
+      text-align: center;
+    }
+  </style>
+</head>
+  <body>
+  <div class="grid-container"></div>
+  <script>
+    // Replace these video IDs with the actual YouTube live stream video IDs
+    const videoIds = [
+      '2ywxK3HC4iA',
+      'ccZpGXxmkhs',
+      'DNnfrmjcHHo',
+      'FeweQREkl44'
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const streamsContainer = document.querySelector('.grid-container');
+      const numStreams = videoIds.length;
+
+      videoIds.forEach(videoId => {
+        const streamContainer = document.createElement('div');
+        streamContainer.className = 'grid-item';
+
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+        iframe.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture';
+        iframe.allowFullscreen = true;
+        iframe.className = 'stream-iframe';
+        iframe.height = '100%'
+        iframe.width = '100%'
+
+        streamContainer.appendChild(iframe);
+        streamsContainer.appendChild(streamContainer);
+      });
+    });
+  </script>
+</body>
+</html>
